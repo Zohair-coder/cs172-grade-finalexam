@@ -1,0 +1,27 @@
+Honda
+City
+2002
+10.3
+300
+AKK 769
+13
+4
+Toyota
+Corolla
+2008
+9.1
+250
+PD 769
+10.1
+4
+Tesla
+CyberTruck
+2020
+15
+20000
+S3XY
+16
+500
+30
+10
+8
