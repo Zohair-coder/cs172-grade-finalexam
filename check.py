@@ -6,7 +6,7 @@ class Homework:
         with open("student_py/"+txtfile, "r") as f:
             self.answer = f.read()
         self.tokens = self.answer.split()
-        self.total_marks = 60
+        self.total_marks = 58
         self.txtfile = txtfile
 
     def check_all(self):
@@ -54,24 +54,26 @@ class Homework:
         return False
     
     def check_abstract_notation_use(self):
-        uses = len(re.findall(r"class Automobile\(ABC\):", self.answer))
-        uses += len(re.findall(r"class Car\(Automobile\):", self.answer))
-        uses += len(re.findall(r"class Trailer\(Automobile\):", self.answer))
+        uses = len(re.findall(r"class [Aa]utomobile\(ABC\):", self.answer))
+        uses += len(re.findall(r"class [Cc]ar\(Automobile\):", self.answer))
+        uses += len(re.findall(r"class [Tt]railer\(Automobile\):", self.answer))
         if uses >= 3:
             return 5
+        print("class declarations: {}".format(uses))
+        print()
         return False
 
     def check_parameters_and_mangling(self):
-        parameters = 1 if len(re.findall(r"def __init__\(self,.*\):", self.answer)) > 0 else 0
-        parameters += 1 if len(re.findall(r"def __init__\(.*make.*\):", self.answer)) > 0 else 0
-        parameters += 1 if len(re.findall(r"def __init__\(.*model.*\):", self.answer)) > 0 else 0
-        parameters += 1 if len(re.findall(r"def __init__\(.*year.*\):", self.answer)) > 0 else 0
-        parameters += 1 if len(re.findall(r"def __init__\(.*mileage.*\):", self.answer)) > 0 else 0
-        parameters += 1 if len(re.findall(r"def __init__\(.*value.*\):", self.answer)) > 0 else 0
-        parameters += 1 if len(re.findall(r"def __init__\(.*vin.*\):", self.answer)) > 0 else 0
-        parameters += 1 if len(re.findall(r"def __init__\(.*mpg.*\):", self.answer)) > 0 else 0
+        parameters = 1 if len(re.findall(r"def __init__\s*\(self,.*\):", self.answer)) > 0 else 0
+        parameters += 1 if len(re.findall(r"def __init__\s*\(.*make.*\):", self.answer)) > 0 else 0
+        parameters += 1 if len(re.findall(r"def __init__\s*\(.*model.*\):", self.answer)) > 0 else 0
+        parameters += 1 if len(re.findall(r"def __init__\s*\(.*year.*\):", self.answer)) > 0 else 0
+        parameters += 1 if len(re.findall(r"def __init__\s*\(.*mileage.*\):", self.answer)) > 0 else 0
+        parameters += 1 if len(re.findall(r"def __init__\s*\(.*value.*\):", self.answer)) > 0 else 0
+        parameters += 1 if len(re.findall(r"def __init__\s*\(.*vin.*\):", self.answer)) > 0 else 0
+        parameters += 1 if len(re.findall(r"def __init__\s*\(.*mpg.*\):", self.answer)) > 0 else 0
         mangling = len(re.findall(r"self.__([A-Za-z][A-Za-z0-9]*)\s*=.*\1.*", self.answer))
-        supers = len(re.findall(r"super\(\).__init__\([\w ,]*\)", self.answer))
+        supers = len(re.findall(r"super\(\).__init__\([\w ,=]*\)", self.answer))
         if parameters >= 8 and mangling >= 12 and supers >= 2:
             return 11
         print("Parameters: {}".format(parameters))
@@ -92,6 +94,8 @@ class Homework:
         sets = len(re.findall(r"def set\w*\(self,", self.answer))
         if sets >= 2:
             return 4
+        print("Sets: {}".format(sets))
+        print()
         return False
 
     def check_str(self):
@@ -99,16 +103,19 @@ class Homework:
         supers = len(re.findall(r"super\(\).__str__\(\)", self.answer))
         if strs >= 3 and supers >= 2:
             return 6
+        print("__str__'s: {}".format(strs))
+        print("__str__ super's: {}".format(supers))
+        print()
         return False
 
     
     def check_eq(self):
         eqs = len(re.findall(r"def __eq__\(self,", self.answer))
-        supers = len(re.findall(r"super\(\).__eq__\(", self.answer))
+        supers = len(re.findall(r"super\(\).__eq__", self.answer))
         if eqs >= 3 and supers >= 2:
             return 6
         print("__eq__'s: {}".format(eqs))
-        print("supers: {}".format(supers))
+        print("__eq__ supers: {}".format(supers))
         print()
         return False
 
@@ -117,20 +124,24 @@ class Homework:
         drives = len(re.findall(r"def drive\(self\):", self.answer))
         if abstracts >= 1 and drives >= 3:
             return 6
+        print("@abstractmethod's: {}".format(abstracts))
+        print("drive's: {}".format(drives))
+        print()
         return False
     
     def check_instance(self):
-        cars = len(re.findall(r"\w+\s*=\s*Car\([\w ,\"\']*\)", self.answer))
-        trailers = len(re.findall(r"\w+\s*=\s*Trailer\([\w ,\"\']*\)", self.answer))
+        cars = len(re.findall(r"\w+\s*=\s*[Cc]ar\([\w .,\"\']*\)", self.answer))
+        trailers = len(re.findall(r"\w+\s*=\s*[Tt]railer\([\w ,.\"\']*\)", self.answer))
 
         if cars >= 1 and trailers >= 1:
             return 3
         print("Cars: {}".format(cars))
         print("Trailers: {}".format(trailers))
+        print()
         return False
     
     def check_append(self):
-        appends = len(re.findall(r"\w*.append\(\w*\)", self.answer))
+        appends = len(re.findall(r"\w*.append\([\w ,\'\"\(\)]*\)", self.answer))
 
         if appends >= 2:
             return 2
